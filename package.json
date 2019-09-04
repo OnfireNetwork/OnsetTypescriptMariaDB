@@ -1,0 +1,22 @@
+{
+  "name": "@onfire-network/onset-typescript-mariadb",
+  "version": "1.0.0",
+  "description": "Onset MariaDB definitions and api",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OnfireServer/OnsetTypescriptMariaDB.git"
+  },
+  "keywords": [
+    "onset",
+    "mariadb"
+  ],
+  "author": "Onfire Network",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OnfireServer/OnsetTypescriptMariaDB/issues"
+  },
+  "homepage": "https://github.com/OnfireServer/OnsetTypescriptMariaDB#readme",
+  "dependencies": {
+    "typescript": "^3.5.3"
+  }
+}
