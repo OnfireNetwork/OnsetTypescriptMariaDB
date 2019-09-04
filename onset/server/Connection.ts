@@ -8,13 +8,17 @@ namespace MariaDB {
             return this.id;
         }
         public query(query: string, callback: (result: MariaDB.ResultSet) => void, ...values: any[]): void {
-            mariadb_query(this.id, mariadb_prepare(this.id, query, values), (resultId: number) => {
-                callback(new MariaDB.ResultSet(this, resultId));
+            mariadb_query(this.id, mariadb_prepare(this.id, query, values), () => {
+                let result = new MariaDB.ResultSet(this);
+                callback(result);
+                result.close();
             });
         }
         public queryAsync(query: string, callback: (result: MariaDB.ResultSet) => void, ...values: any[]): void {
-            mariadb_async_query(this.id, mariadb_prepare(this.id, query, values), (resultId: number) => {
-                callback(new MariaDB.ResultSet(this, resultId));
+            mariadb_async_query(this.id, mariadb_prepare(this.id, query, values), () => {
+                let result = new MariaDB.ResultSet(this);
+                callback(result);
+                result.close();
             });
         }
         public querySync(query: string, ...values: any[]): MariaDB.ResultSet {
@@ -26,6 +30,9 @@ namespace MariaDB {
         }
         public setCharset(charset: string): void {
             mariadb_set_charset(this.id, charset);
+        }
+        public getLastError(): MariaDB.Error {
+            return new MariaDB.Error(mariadb_errno(this.id), mariadb_error(this.id));
         }
         public close(): void {
             mariadb_close(this.id);

@@ -3,8 +3,11 @@ namespace MariaDB {
         private currentRow = 0;
         private rowCount: number;
         private insertId: number;
-        constructor(private connection: MariaDB.Connection, private id: number){
-            mariadb_set_active_result(id);
+        private closed = false;
+        constructor(private connection: MariaDB.Connection, private id?: number){
+            if(id !== undefined){
+                mariadb_set_active_result(id);
+            }
             this.rowCount = mariadb_get_row_count();
             this.insertId = mariadb_get_insert_id(this.connection.getId());
         }
@@ -19,7 +22,12 @@ namespace MariaDB {
             return true;
         }
         public getString(column: number|string): string {
-            mariadb_set_active_result(this.id);
+            if(this.closed){
+                return "";
+            }
+            if(this.id !== undefined){
+                mariadb_set_active_result(this.id);
+            }
             if(typeof column === 'string'){
                 return mariadb_get_value_name(this.currentRow, column);
             }else{
@@ -27,7 +35,12 @@ namespace MariaDB {
             }
         }
         public getInt(column: number|string): number {
-            mariadb_set_active_result(this.id);
+            if(this.closed){
+                return -1;
+            }
+            if(this.id !== undefined){
+                mariadb_set_active_result(this.id);
+            }
             if(typeof column === 'string'){
                 return mariadb_get_value_name_int(this.currentRow, column);
             }else{
@@ -35,7 +48,12 @@ namespace MariaDB {
             }
         }
         public getFloat(column: number|string): number {
-            mariadb_set_active_result(this.id);
+            if(this.closed){
+                return -1;
+            }
+            if(this.id !== undefined){
+                mariadb_set_active_result(this.id);
+            }
             if(typeof column === 'string'){
                 return mariadb_get_value_name_float(this.currentRow, column);
             }else{
@@ -46,22 +64,43 @@ namespace MariaDB {
             return this.rowCount;
         }
         public getColumnCount(): number {
-            mariadb_set_active_result(this.id);
+            if(this.closed){
+                return -1;
+            }
+            if(this.id !== undefined){
+                mariadb_set_active_result(this.id);
+            }
             return mariadb_get_field_count();
         }
         public getAffectedRows(): number {
-            mariadb_set_active_result(this.id);
+            if(this.closed){
+                return -1;
+            }
+            if(this.id !== undefined){
+                mariadb_set_active_result(this.id);
+            }
             return mariadb_get_affected_rows();
         }
         public getInsertId(): number {
             return this.insertId;
         }
         public getColumnName(index: number): string {
-            mariadb_set_active_result(this.id);
+            if(this.closed){
+                return "";
+            }
+            if(this.id !== undefined){
+                mariadb_set_active_result(this.id);
+            }
             return mariadb_get_field_name(index);
         }
         public close(): void {
-            mariadb_delete_result(this.id);
+            if(this.closed){
+                return;
+            }
+            this.closed = true;
+            if(this.id !== undefined){
+                mariadb_delete_result(this.id);
+            }
         }
     }
 }
