@@ -7,21 +7,21 @@ namespace MariaDB {
         public getId(): number {
             return this.id;
         }
-        public query(query: string, callback: (result: MariaDB.ResultSet) => void, ...values: any[]): void {
+        public query(query: string, callback: (result: MariaDB.ResultSet) => void, values: any[]): void {
             mariadb_query(this.id, this.prepare(query, values), () => {
                 let result = new MariaDB.ResultSet(this);
                 callback(result);
                 result.close();
             });
         }
-        public queryAsync(query: string, callback: (result: MariaDB.ResultSet) => void, ...values: any[]): void {
+        public queryAsync(query: string, callback: (result: MariaDB.ResultSet) => void, values: any[]): void {
             mariadb_async_query(this.id, this.prepare(query, values), () => {
                 let result = new MariaDB.ResultSet(this);
                 callback(result);
                 result.close();
             });
         }
-        public querySync(query: string, ...values: any[]): MariaDB.ResultSet {
+        public querySync(query: string, values: any[]): MariaDB.ResultSet {
             let resultId = mariadb_await_query(this.id, this.prepare(query, values));
             return new MariaDB.ResultSet(this, resultId);
         }
