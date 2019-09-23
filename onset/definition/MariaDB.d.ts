@@ -1,5 +1,9 @@
 /** @noSelfInFile */
 
+//Helper
+declare function print(value: any): void;
+
+//MariaDB
 declare function mariadb_connect(host: string, user: string, password: string, database: string): number;
 declare function mariadb_connect_file(fileName: string): number;
 declare function mariadb_set_charset(handleId: number, charset: string): void;

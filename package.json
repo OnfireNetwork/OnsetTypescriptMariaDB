@@ -1,6 +1,6 @@
 {
   "name": "@onfire-network/onset-typescript-mariadb",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Onset MariaDB definitions and api",
   "repository": {
     "type": "git",
